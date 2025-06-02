@@ -8,7 +8,7 @@ const stopBtn = document.getElementById('stopBtn');
 let camera = null;
 let scores = [];
 
-const REAL_EYE_DISTANCE_MM = 63; // эталон межглазного расстояния в мм
+const REAL_EYE_DISTANCE_MM = 63; // среднее расстояние между глазами в мм
 
 function get3DDistance(p1, p2) {
   return Math.sqrt(
@@ -44,14 +44,14 @@ function updateResults(landmarks) {
   const eyeDist3D = get3DDistance(leftEye, rightEye);
   const faceWidth3D = get3DDistance(faceLeft, faceRight);
 
-  // масштаб: сколько мм в 1 "единице" модели
+  // масштаб мм на 1 "единицу"
   const mmPerUnit = REAL_EYE_DISTANCE_MM / eyeDist3D;
 
-  // пересчёт в мм с масштабом
+  // пересчет в мм
   const eyeDistMm = (eyeDist3D * mmPerUnit).toFixed(1);
   const faceWidthMm = (faceWidth3D * mmPerUnit).toFixed(1);
 
-  // простая симметрия по 2D x
+  // симметрия в 2D для простоты
   const symmetry = 1 - Math.abs(leftEye.x - (1 - rightEye.x));
   scores.push(symmetry);
   if (scores.length > 30) scores.shift();
