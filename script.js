@@ -12,25 +12,58 @@ function getDistance(p1, p2) {
   return Math.sqrt((p1.x - p2.x) ** 2 + (p1.y - p2.y) ** 2);
 }
 
+function pxToMm(px) {
+  const dpi = 96; // стандартный DPI
+  const mmPerPx = 25.4 / dpi; // ≈ 0.2646
+  return px * mmPerPx;
+}
+
+function detectSmile(landmarks) {
+  const leftMouth = landmarks[61];
+  const rightMouth = landmarks[291];
+  const topLip = landmarks[13];
+  const bottomLip = landmarks[14];
+
+  const mouthWidth = getDistance(leftMouth, rightMouth);
+  const mouthHeight = getDistance(topLip, bottomLip);
+
+  const ratio = mouthWidth / mouthHeight;
+
+  if (ratio > 2.5) return 'Улыбка 😀';
+  else if (ratio < 1.5) return 'Грусть 😟';
+  else return 'Нейтрально 😐';
+}
+
 function updateResults(landmarks) {
   const leftEye = landmarks[33];
   const rightEye = landmarks[263];
   const faceLeft = landmarks[234];
   const faceRight = landmarks[454];
 
-  const eyeDist = getDistance(leftEye, rightEye);
-  const faceWidth = getDistance(faceLeft, faceRight);
+  const eyeDistPx = getDistance(leftEye, rightEye) * canvasElement.width;
+  const faceWidthPx = getDistance(faceLeft, faceRight) * canvasElement.width;
+
+  const eyeDistMm = pxToMm(eyeDistPx).toFixed(1);
+  const faceWidthMm = pxToMm(faceWidthPx).toFixed(1);
 
   const symmetry = 1 - Math.abs(leftEye.x - (1 - rightEye.x));
-
   scores.push(symmetry);
   if (scores.length > 30) scores.shift();
-
   const average = scores.reduce((a, b) => a + b, 0) / scores.length;
 
-  document.getElementById('eyeDistance').textContent = eyeDist.toFixed(2);
-  document.getElementById('faceWidth').textContent = faceWidth.toFixed(2);
+  const emotion = detectSmile(landmarks);
+
+  document.getElementById('eyeDistance').textContent = `${eyeDistMm} мм`;
+  document.getElementById('faceWidth').textContent = `${faceWidthMm} мм`;
   document.getElementById('averageScore').textContent = (average * 100).toFixed(1) + '%';
+
+  let emotionEl = document.getElementById('emotion');
+  if (!emotionEl) {
+    emotionEl = document.createElement('p');
+    emotionEl.innerHTML = `<strong>Эмоция:</strong> <span id="emotion">–</span>`;
+    document.querySelector('.result').appendChild(emotionEl);
+  }
+  emotionEl.querySelector('span').textContent = emotion;
 }
 
 function onResults(results) {
@@ -44,7 +77,6 @@ function onResults(results) {
 
     canvasCtx.strokeStyle = '#00FF00';
     canvasCtx.lineWidth = 1;
-
     for (let point of landmarks) {
       canvasCtx.beginPath();
       canvasCtx.arc(point.x * canvasElement.width, point.y * canvasElement.height, 1.5, 0, 2 * Math.PI);
@@ -78,7 +110,7 @@ startBtn.onclick = async () => {
     height: 480
   });
 
-  videoElement.style.display = 'none'; // скрыт, если не нужен
+  videoElement.style.display = 'none';
   await camera.start();
 };
 
