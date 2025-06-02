@@ -1,41 +1,56 @@
-@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&display=swap');
-
 body {
   margin: 0;
-  font-family: 'Fredoka', sans-serif;
-  background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(135deg, #f6d365, #fda085);
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
-  overflow: hidden;
 }
 
 .container {
   background: white;
-  padding: 1.5rem;
+  padding: 2rem;
   border-radius: 1.5rem;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
   text-align: center;
-  max-width: 90%;
-  width: 420px;
+  width: 90%;
+  max-width: 480px;
 }
 
-h1 {
-  margin-bottom: 1rem;
-  color: #333;
-  font-size: 1.8rem;
-}
-video {
-  display: none;
-}
 canvas {
   width: 100%;
   border-radius: 1rem;
   margin-bottom: 1rem;
 }
 
+.action-btn {
+  padding: 0.6rem 1.5rem;
+  margin: 0.5rem;
+  font-size: 1rem;
+  background-color: #6c63ff;
+  color: white;
+  border: none;
+  border-radius: 1rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.action-btn:disabled {
+  background-color: #aaa;
+  cursor: not-allowed;
+}
+
+.action-btn:hover:not(:disabled) {
+  background-color: #5b54e5;
+}
+
 .result {
-  font-size: 1.5rem;
-  color: #444;
+  text-align: left;
+  margin-top: 1.5rem;
+  font-size: 1rem;
+}
+
+.result span {
+  font-weight: bold;
 }
