@@ -1,60 +1,70 @@
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&display=swap');
+
 body {
   margin: 0;
+  padding: 1rem;
   font-family: 'Fredoka', sans-serif;
-  background: linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 100%);
+  background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
   display: flex;
   justify-content: center;
-  align-items: flex-start;
-  min-height: 100vh;
-  padding: 2rem;
+  align-items: center;
+  height: 100vh;
   box-sizing: border-box;
 }
 
 .container {
   background: white;
   padding: 2rem;
-  border-radius: 2rem;
+  border-radius: 1.5rem;
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+  max-width: 600px;
   width: 100%;
-  max-width: 720px;
   text-align: center;
-  animation: fadeIn 1.2s ease-out;
 }
 
 .video-area {
+  position: relative;
   width: 100%;
+  max-width: 100%;
+  aspect-ratio: 4/3;
+  margin-bottom: 1rem;
+  border-radius: 1rem;
   overflow: hidden;
 }
 
-canvas {
+video, canvas {
   width: 100%;
   height: auto;
   border-radius: 1rem;
-  margin-top: 1rem;
+}
+
+.controls {
+  margin: 1rem 0;
 }
 
 .action-btn {
-  background: #4a90e2;
-  border: none;
-  padding: 0.75rem 1.5rem;
-  border-radius: 1rem;
-  color: white;
+  margin: 0.5rem;
+  padding: 0.6rem 1.5rem;
   font-size: 1rem;
+  background: #6c63ff;
+  color: white;
+  font-weight: 600;
+  border: none;
+  border-radius: 1rem;
   cursor: pointer;
-  margin: 0 0.5rem;
-  transition: background 0.3s ease;
+  transition: 0.3s ease;
 }
 
-.action-btn:disabled {
-  background: #a0c4ff;
-  cursor: not-allowed;
+.action-btn:hover {
+  background: #5b54e5;
+  transform: scale(1.05);
 }
 
-.action-btn:hover:not(:disabled) {
-  background: #357abd;
+.result {
+  margin-top: 1rem;
+  font-size: 1.1rem;
+  text-align: left;
 }
-
-@keyframes fadeIn {
-  from {opacity: 0;}
-  to {opacity: 1;}
+.result span {
+  font-weight: bold;
 }
