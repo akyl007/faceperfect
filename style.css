@@ -1,13 +1,13 @@
-@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&display=swap');
-
 body {
   margin: 0;
   font-family: 'Fredoka', sans-serif;
   background: linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 100%);
   display: flex;
   justify-content: center;
-  align-items: center;
-  height: 100vh;
+  align-items: flex-start;
+  min-height: 100vh;
+  padding: 2rem;
+  box-sizing: border-box;
 }
 
 .container {
@@ -15,51 +15,20 @@ body {
   padding: 2rem;
   border-radius: 2rem;
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
-  width: 95%;
-  max-width: 700px;
+  width: 100%;
+  max-width: 720px;
   text-align: center;
   animation: fadeIn 1.2s ease-out;
 }
 
-h1 {
-  font-size: 2rem;
-  margin-bottom: 1rem;
-  color: #333;
+.video-area {
+  width: 100%;
+  overflow: hidden;
 }
 
-.controls {
-  margin-top: 1.5rem;
-}
-
-.action-btn {
-  margin: 0.5rem;
-  padding: 0.8rem 2rem;
-  background: #6c63ff;
-  color: white;
-  font-weight: 600;
-  border: none;
-  border-radius: 1.5rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.action-btn:hover {
-  background: #5b54e5;
-  transform: scale(1.05);
-}
-
-.result {
-  margin-top: 1.5rem;
-  font-size: 1.1rem;
-  color: #444;
-}
-
-.result span {
-  font-weight: bold;
-  color: #333;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+canvas {
+  width: 100%;
+  height: auto;
+  border-radius: 1rem;
+  margin-top: 1rem;
 }
