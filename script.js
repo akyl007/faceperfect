@@ -8,14 +8,14 @@ const stopBtn = document.getElementById('stopBtn');
 let camera = null;
 let scores = [];
 
-function getDistance(p1, p2) {
-  return Math.sqrt((p1.x - p2.x) ** 2 + (p1.y - p2.y) ** 2);
-}
+const REAL_EYE_DISTANCE_MM = 63; // среднее расстояние между глазами в мм
 
-function pxToMm(px) {
-  const dpi = 96; // стандартный DPI
-  const mmPerPx = 25.4 / dpi; // ≈ 0.2646
-  return px * mmPerPx;
+function get3DDistance(p1, p2) {
+  return Math.sqrt(
+    (p1.x - p2.x) ** 2 +
+    (p1.y - p2.y) ** 2 +
+    (p1.z - p2.z) ** 2
+  );
 }
 
 function detectSmile(landmarks) {
@@ -24,8 +24,8 @@ function detectSmile(landmarks) {
   const topLip = landmarks[13];
   const bottomLip = landmarks[14];
 
-  const mouthWidth = getDistance(leftMouth, rightMouth);
-  const mouthHeight = getDistance(topLip, bottomLip);
+  const mouthWidth = get3DDistance(leftMouth, rightMouth);
+  const mouthHeight = get3DDistance(topLip, bottomLip);
 
   const ratio = mouthWidth / mouthHeight;
 
@@ -40,12 +40,18 @@ function updateResults(landmarks) {
   const faceLeft = landmarks[234];
   const faceRight = landmarks[454];
 
-  const eyeDistPx = getDistance(leftEye, rightEye) * canvasElement.width;
-  const faceWidthPx = getDistance(faceLeft, faceRight) * canvasElement.width;
+  // 3D расстояния
+  const eyeDist3D = get3DDistance(leftEye, rightEye);
+  const faceWidth3D = get3DDistance(faceLeft, faceRight);
 
-  const eyeDistMm = pxToMm(eyeDistPx).toFixed(1);
-  const faceWidthMm = pxToMm(faceWidthPx).toFixed(1);
+  // масштаб мм на 1 "единицу"
+  const mmPerUnit = REAL_EYE_DISTANCE_MM / eyeDist3D;
 
+  // пересчет в мм
+  const eyeDistMm = (eyeDist3D * mmPerUnit).toFixed(1);
+  const faceWidthMm = (faceWidth3D * mmPerUnit).toFixed(1);
+
+  // симметрия в 2D для простоты
   const symmetry = 1 - Math.abs(leftEye.x - (1 - rightEye.x));
   scores.push(symmetry);
   if (scores.length > 30) scores.shift();
@@ -53,8 +59,8 @@ function updateResults(landmarks) {
 
   const emotion = detectSmile(landmarks);
 
-  document.getElementById('eyeDistance').textContent = `${eyeDistMm} мм`;
-  document.getElementById('faceWidth').textContent = `${faceWidthMm} мм`;
+  document.getElementById('eyeDistance').textContent = eyeDistMm;
+  document.getElementById('faceWidth').textContent = faceWidthMm;
   document.getElementById('averageScore').textContent = (average * 100).toFixed(1) + '%';
 
   let emotionEl = document.getElementById('emotion');
