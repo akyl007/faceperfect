@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -8,14 +8,27 @@
 </head>
 <body>
   <div class="container">
-    <h1>📷 Perfect Face Analyzer</h1>
-    <canvas id="outputCanvas"></canvas>
-    <div class="result" id="score">Сканируем лицо...</div>
+    <h1>Perfect Face Analyzer</h1>
+
+    <div class="video-area">
+      <canvas id="outputCanvas"></canvas>
+    </div>
+
+    <div class="controls">
+      <button id="startBtn" class="action-btn">Начать сканирование</button>
+      <button id="stopBtn" class="action-btn" disabled>Стоп</button>
+    </div>
+
+    <div class="result">
+      <h2>Результаты</h2>
+      <p><strong>Средняя симметрия:</strong> <span id="averageScore">–</span></p>
+      <p><strong>Расстояние между глазами:</strong> <span id="eyeDistance">–</span> px</p>
+      <p><strong>Ширина лица:</strong> <span id="faceWidth">–</span> px</p>
+    </div>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/face_mesh.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/face_mesh.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
