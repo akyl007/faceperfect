@@ -26,8 +26,10 @@ h1 {
   color: #333;
   font-size: 1.8rem;
 }
-
-video, canvas {
+video {
+  display: none;
+}
+canvas {
   width: 100%;
   border-radius: 1rem;
   margin-bottom: 1rem;
