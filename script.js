@@ -67,25 +67,45 @@ function updateResults(landmarks) {
 }
 
 function onResults(results) {
-  canvasCtx.save();
-  canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
-  canvasCtx.drawImage(results.image, 0, 0, canvasElement.width, canvasElement.height);
+  if (!results.multiFaceLandmarks || results.multiFaceLandmarks.length === 0) return;
 
-  if (results.multiFaceLandmarks.length > 0) {
-    const landmarks = results.multiFaceLandmarks[0];
-    updateResults(landmarks);
+  const landmarks = results.multiFaceLandmarks[0];
 
-    canvasCtx.strokeStyle = '#00FF00';
-    canvasCtx.lineWidth = 1;
-    for (let point of landmarks) {
-      canvasCtx.beginPath();
-      canvasCtx.arc(point.x * canvasElement.width, point.y * canvasElement.height, 1.5, 0, 2 * Math.PI);
-      canvasCtx.stroke();
-    }
+  canvas.width = video.videoWidth;
+  canvas.height = video.videoHeight;
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+  // Рисуем точки
+  ctx.fillStyle = "limegreen";
+  for (const point of landmarks) {
+    const x = point.x * canvas.width;
+    const y = point.y * canvas.height;
+    ctx.beginPath();
+    ctx.arc(x, y, 1.5, 0, 2 * Math.PI);
+    ctx.fill();
   }
 
-  canvasCtx.restore();
+  // 3D измерения
+  const leftEye = landmarks[33];
+  const rightEye = landmarks[263];
+  const leftFace = landmarks[234];
+  const rightFace = landmarks[454];
+
+  const eyeDist = get3DDistance(leftEye, rightEye);
+  const faceWidth = get3DDistance(leftFace, rightFace);
+
+  mmPerUnit = 63 / eyeDist;
+
+  eyeDistanceEl.textContent = (eyeDist * mmPerUnit).toFixed(1);
+  faceWidthEl.textContent = (faceWidth * mmPerUnit).toFixed(1);
+
+  const symmetry = Math.abs(landmarks[234].x - (1 - landmarks[454].x)) * 100;
+  averageScoreEl.textContent = (100 - symmetry).toFixed(1) + " %";
+
+  emotionEl.textContent = estimateEmotion(landmarks);
 }
+
 
 const faceMesh = new FaceMesh({
   locateFile: file => `https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/${file}`,
