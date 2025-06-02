@@ -11,8 +11,8 @@
     <h1>Perfect Face Analyzer</h1>
 
     <div class="video-area">
-      <video id="inputVideo" autoplay muted playsinline></video>
-      <canvas id="outputCanvas"></canvas>
+      <video id="inputVideo" autoplay muted playsinline style="display: none;"></video>
+      <canvas id="outputCanvas" width="640" height="480"></canvas>
     </div>
 
     <div class="controls">
@@ -22,10 +22,9 @@
 
     <div class="result">
       <h2>Результаты</h2>
-      <p><strong>Симметрия лица:</strong> <span id="averageScore">–</span></p>
-      <p><strong>Расстояние между глазами:</strong> <span id="eyeDistance">–</span> мм</p>
-      <p><strong>Ширина лица:</strong> <span id="faceWidth">–</span> мм</p>
-      <p><strong>Эмоция:</strong> <span id="emotion">–</span></p>
+      <p><strong>Средняя симметрия:</strong> <span id="averageScore">–</span></p>
+      <p><strong>Расстояние между глазами:</strong> <span id="eyeDistance">–</span> px</p>
+      <p><strong>Ширина лица:</strong> <span id="faceWidth">–</span> px</p>
     </div>
   </div>
 
